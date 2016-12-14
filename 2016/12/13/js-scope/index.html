@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>OOP之作用域与闭包 | Poetry&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="JavaScript,作用域,闭包," />
+  
+
+  <meta name="description" content="作用域
+
+定义
+
+
+在编程语言中，作用域控制着变量与参数的可见性及生命周期，它能减少名称冲突，而且提供了自动内存管理 –javascript 语言精粹
+
+
+一个变量、函数或者成员可以在代码中访问到的范围
+js的变量作用域是基于其特有的作用域链的。
+全局变量都是window对象的属性
+没有块级作用域
+函数中声明的变量在整个函数中都有定义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOP之作用域与闭包">
+<meta property="og:url" content="http://www.poetries.top/2016/12/13/js-scope/index.html">
+<meta property="og:site_name" content="Poetry's Blog">
+<meta property="og:description" content="作用域
+
+定义
+
+
+在编程语言中，作用域控制着变量与参数的可见性及生命周期，它能减少名称冲突，而且提供了自动内存管理 –javascript 语言精粹
+
+
+一个变量、函数或者成员可以在代码中访问到的范围
+js的变量作用域是基于其特有的作用域链的。
+全局变量都是window对象的属性
+没有块级作用域
+函数中声明的变量在整个函数中都有定义">
+<meta property="og:updated_time" content="2016-12-14T07:59:53.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OOP之作用域与闭包">
+<meta name="twitter:description" content="作用域
+
+定义
+
+
+在编程语言中，作用域控制着变量与参数的可见性及生命周期，它能减少名称冲突，而且提供了自动内存管理 –javascript 语言精粹
+
+
+一个变量、函数或者成员可以在代码中访问到的范围
+js的变量作用域是基于其特有的作用域链的。
+全局变量都是window对象的属性
+没有块级作用域
+函数中声明的变量在整个函数中都有定义">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=d671a41f" rel="stylesheet">
+
+
+  
+
+  
+
+  
+
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/guestbook/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            留言
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录<i class="iconfont toc-title" style="display:inline-block;color:#87998d;width:20px;height:20px;">&#xf004b;</i></strong>
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#作用域"><span class="toc-text">作用域</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作用域链"><span class="toc-text">作用域链</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#闭包"><span class="toc-text">闭包</span></a></li></ol>
+  </div>
+  <i class="iconfont" id="toc-eye" style="display:inline-block;color:#b36619;position:absolute;top:72px;right:233px;cursor:pointer;
+    font-size: 24px;">&#xe61c;</i>
+  <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+  <script>
+	$("#toc-eye").click(function(){
+	
+			$("#toc.toc-article").toggle(1000);
+			$(this).css({
+				"right":"265px"
+			});
+		
+	});
+  </script>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-js-scope" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">OOP之作用域与闭包</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.12.13</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Poetry</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/Front-End/">Front-End</a>
+  </span>
+
+
+
+      
+
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h4 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h4><hr>
+<ul>
+<li>定义</li>
+</ul>
+<blockquote>
+<p>在编程语言中，作用域控制着变量与参数的可见性及生命周期，它能减少名称冲突，而且提供了自动内存管理 –javascript 语言精粹</p>
+</blockquote>
+<ul>
+<li>一个变量、函数或者成员可以在代码中访问到的范围<ul>
+<li><code>js</code>的变量作用域是基于其特有的作用域链的。</li>
+<li>全局变量都是<code>window</code>对象的属性</li>
+<li>没有块级作用域</li>
+<li>函数中声明的变量在整个函数中都有定义<a id="more"></a>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//全局作用域</span></div><div class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</div><div class="line"></div><div class="line"><span class="comment">//没有块级作用域</span></div><div class="line"><span class="keyword">if</span>(fasle)&#123;</div><div class="line">    <span class="keyword">var</span> b =<span class="number">2</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//函数作用域</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">    <span class="built_in">console</span>.log(a);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="作用域链"><a href="#作用域链" class="headerlink" title="作用域链"></a>作用域链</h4><hr>
+<ul>
+<li>作用域链是一个对象列表，上下文代码中出现的标识符在这个列表中进行查找</li>
+<li>如果一个变量在函数自身的作用域（在自身的变量/活动对象）中没有找到，那么将会查找它父函数（外层函数）的变量对象，以此类推</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span> (<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> x =<span class="number">100</span>;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">g</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(x);</div><div class="line">    &#125;</div><div class="line">    g();</div><div class="line">&#125;</div><div class="line">f();</div></pre></td></tr></table></figure>
+<ul>
+<li>这里形成了一条作用域链，当函数<code>g</code>访问不到变量时，它会通过内部的<code>[[scope]]</code>对象查找作用域链上的执行上下文，当找到就终止，找不到会继续，直到<code>window</code>对象上也没有的时候，会报错</li>
+<li>需要注意的是，用<code>new Function</code>创建的函数，其作用域指向全局作用域</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> x = <span class="number">100</span>;</div><div class="line">    <span class="comment">// g.[[scope]] == window</span></div><div class="line">    <span class="keyword">var</span> g = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">""</span>, <span class="string">"alert(x)"</span>);</div><div class="line"></div><div class="line">    g();</div><div class="line">&#125;</div><div class="line">f();</div><div class="line"><span class="comment">//报错 x is not defined</span></div></pre></td></tr></table></figure>
+<h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><hr>
+<ul>
+<li><p>我的理解就是，一个函数捕获其父函数的自由变量，这就形成了闭包</p>
+</li>
+<li><p>闭包的本质</p>
+<ul>
+<li>作用域链的存在</li>
+</ul>
+</li>
+<li>闭包的好处<ul>
+<li>减少全局变量</li>
+<li>减少传递给函数的参数数量</li>
+<li>封装</li>
+</ul>
+</li>
+</ul>
+
+    
+  </div>
+</article>
+
+<button class="assist-btn2 circle" id="assist_btn2" title="点亮屏幕" style="left: 27px; top: 152px;">
+         <i class="iconfont" style="display:inline-block;color:red;width:20px;height:20px;">&#xe61d;</i>
+    </button>
+<button class="assist-btn1 circle" id="assist_btn1" title="关闭屏幕亮度" style="left: 27px; top: 152px;">
+         <i class="iconfont toc-title" style="display:inline-block;color:red;width:20px;height:20px;">&#xe61d;</i>
+    </button>
+	
+
+	
+<script type="text/javascript">
+
+
+    // white theme
+    var body = {color: "#555", background: "#000"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#222"};
+    var logo_line_i = {background: "#222"};
+    // var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a, .show-commit-cls a, #donate_board a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        //$(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        // $("code").css({color: '#c5c8c6', background: '#1d1f21'});
+        //$("#assist_btn1").hide(1500);
+    }
+
+    $(function () {
+		$("#assist_btn2").css("display","none");
+        $("#assist_btn1").click(function() {
+            switch_theme();
+			$("div#toc.toc-article").css({
+				"background":"#eaeaea",
+				"opacity":1
+			});
+			$(".toc-article ol").show();
+			$("#toc.toc-article .toc-title").css("color","#a98602");
+			$("#assist_btn1").css("display","none");
+			$("#assist_btn2").css("display","block");
+        });
+		$("#assist_btn2").click(function() {
+			$("#assist_btn2").css("display","none");
+			$("#assist_btn1").css("display","block");
+			 $("body").css("background","url(http://www.miaov.com/static/ie/images/news/bg.png)")
+            $(".header, .footer").css("background","url(http://www.miaov.com/static/ie/images/news/bg.png)")
+			$(".toc-article ol").toggle(1000);
+        });
+    });
+
+</script>
+</div>
+
+
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持poetries</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/weixin.jpg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/zhifubao.jpg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/guestbook/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              留言
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+  <section class="duoshuo-comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="http://www.poetries.top/2016/12/13/js-scope/index.html" data-title="OOP之作用域与闭包" data-url="http://www.poetries.top/2016/12/13/js-scope/index.html"></div>
+    <!-- 多说评论框 end -->
+  </section>
+
+
+
+
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"poetry"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
